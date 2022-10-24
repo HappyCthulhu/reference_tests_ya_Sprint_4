@@ -1,4 +1,5 @@
 from selenium.webdriver import Firefox
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 
@@ -20,6 +21,31 @@ class RootPage(BasePage):
         'Да, обязательно. Всем самокатов! И Москве, и Московской области.',
     ]
 
+    questions_locators = (
+        (By.XPATH, "//div[@id='accordion__heading-0']"),
+        (By.XPATH, "//div[@id='accordion__heading-1']"),
+        (By.XPATH, "//div[@id='accordion__heading-2']"),
+        (By.XPATH, "//div[@id='accordion__heading-3']"),
+        (By.XPATH, "//div[@id='accordion__heading-4']"),
+        (By.XPATH, "//div[@id='accordion__heading-5']"),
+        (By.XPATH, "//div[@id='accordion__heading-6']"),
+        (By.XPATH, "//div[@id='accordion__heading-7']"),
+    )
+
+    answers_locators = (
+        (By.XPATH, "//div[@id='accordion__panel-0']/p"),
+        (By.XPATH, "//div[@id='accordion__panel-1']/p"),
+        (By.XPATH, "//div[@id='accordion__panel-2']/p"),
+        (By.XPATH, "//div[@id='accordion__panel-3']/p"),
+        (By.XPATH, "//div[@id='accordion__panel-4']/p"),
+        (By.XPATH, "//div[@id='accordion__panel-5']/p"),
+        (By.XPATH, "//div[@id='accordion__panel-6']/p"),
+        (By.XPATH, "//div[@id='accordion__panel-7']/p"),
+    )
+
+    button_order_top = (By.XPATH, '(//button[contains(@class, "Button_Button")])[1]')
+    button_order_bottom = (By.XPATH, '//button[contains(@class, "Button_UltraBig")]')
+
     def open(self):
         return self.driver.get('https://qa-scooter.praktikum-services.ru/')
 
@@ -29,4 +55,3 @@ class RootPage(BasePage):
 
     def click_on_question(self, question_xpath):
         WebDriverWait(self.driver, 3).until(EC.element_to_be_clickable(question_xpath)).click()
-

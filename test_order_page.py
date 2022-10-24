@@ -1,7 +1,6 @@
 import allure
 from selenium.webdriver import Firefox
 
-from locators import OrderPageLocators
 from pages.order import OrderPage
 
 
@@ -15,7 +14,7 @@ class TestOrderPage:
         page.process_about_rent_page(comment)
         page.confirm_purchase()
 
-        elem_text = driver.find_element(*OrderPageLocators.text_purchase_details).text
+        elem_text = driver.find_element(*OrderPage.text_purchase_details).text
         purchase_numbers = elem_text.split('Номер заказа:')[1].split('.')[0].strip()
 
         assert purchase_numbers.isnumeric()

@@ -1,7 +1,6 @@
 import allure
 import pytest
 
-from locators import RootPageLocators
 from pages.root import RootPage
 
 
@@ -13,8 +12,8 @@ class TestRootPage:
         (
                 (question_locator, answer_locator, answer, question_number) for
                 question_locator, answer_locator, answer, question_number in
-                zip(RootPageLocators.questions, RootPageLocators.answers, RootPage.answers,
-                    range(1, len(RootPageLocators.questions) + 1))
+                zip(RootPage.questions_locators, RootPage.answers_locators, RootPage.answers,
+                    range(1, len(RootPage.questions_locators) + 1))
         )
     )
     def test_question(self, driver, question_locator, answer_locator, answer, question_number):
@@ -30,7 +29,7 @@ class TestRootPage:
         driver.implicitly_wait(3)
         page = RootPage(driver)
         page.open()
-        driver.find_element(*RootPageLocators.button_order_top).click()
+        driver.find_element(*RootPage.button_order_top).click()
         assert driver.current_url == 'https://qa-scooter.praktikum-services.ru/order', 'Переход на страницу заказа не совершен'
 
     @allure.title('Пользователь может перейти на страницу заказа через нижнюю кнопку заказа')
@@ -38,7 +37,7 @@ class TestRootPage:
         driver.implicitly_wait(3)
         page = RootPage(driver)
         page.open()
-        button = driver.find_element(*RootPageLocators.button_order_bottom)
+        button = driver.find_element(*RootPage.button_order_bottom)
         driver.execute_script("arguments[0].scrollIntoView();", button)
         button.click()
         assert driver.current_url == 'https://qa-scooter.praktikum-services.ru/order', 'Переход на страницу заказа не совершен'
