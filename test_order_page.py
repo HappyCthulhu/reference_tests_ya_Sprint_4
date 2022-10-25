@@ -2,13 +2,34 @@ import allure
 from selenium.webdriver import Firefox
 
 from pages.order import OrderPage
+from pages.root import RootPage
 
 
 class TestOrderPage:
     @allure.title('Проверка возможности сделать заказ')
-    def test_customer_can_make_order(self, driver: Firefox, name, surname, phone, address, comment):
-        page = OrderPage(driver)
+    def test_customer_can_make_order_via_upper_button(self, driver: Firefox, name, surname, phone, address, comment):
+        page = RootPage(driver)
         page.open()
+        driver.find_element(*RootPage.button_order_top).click()
+
+        page = OrderPage(driver)
+
+        page.process_about_customer_page(name, surname, phone, address)
+        page.process_about_rent_page(comment)
+        page.confirm_purchase()
+
+        elem_text = driver.find_element(*OrderPage.text_purchase_details).text
+        purchase_numbers = elem_text.split('Номер заказа:')[1].split('.')[0].strip()
+
+        assert purchase_numbers.isnumeric()
+
+    def test_customer_can_make_order_via_bottom_button(self, driver: Firefox, name, surname, phone, address, comment):
+        page = RootPage(driver)
+        page.open()
+        page.scroll_to_element(RootPage.button_order_bottom)
+        driver.find_element(*RootPage.button_order_bottom).click()
+
+        page = OrderPage(driver)
 
         page.process_about_customer_page(name, surname, phone, address)
         page.process_about_rent_page(comment)

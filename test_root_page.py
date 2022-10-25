@@ -24,24 +24,6 @@ class TestRootPage:
         assert driver.find_element(*answer_locator).text == answer, \
             f'Ответ на вопрос {question_number} не совпадает с ожидаемым'
 
-    @allure.title('Пользователь может перейти на страницу заказа через верхнюю кнопку заказа')
-    def test_go_to_order_page_via_upper_order_button(self, driver):
-        driver.implicitly_wait(3)
-        page = RootPage(driver)
-        page.open()
-        driver.find_element(*RootPage.button_order_top).click()
-        assert driver.current_url == 'https://qa-scooter.praktikum-services.ru/order', 'Переход на страницу заказа не совершен'
-
-    @allure.title('Пользователь может перейти на страницу заказа через нижнюю кнопку заказа')
-    def test_go_to_order_page_via_bottom_order_button(self, driver):
-        driver.implicitly_wait(3)
-        page = RootPage(driver)
-        page.open()
-        button = driver.find_element(*RootPage.button_order_bottom)
-        driver.execute_script("arguments[0].scrollIntoView();", button)
-        button.click()
-        assert driver.current_url == 'https://qa-scooter.praktikum-services.ru/order', 'Переход на страницу заказа не совершен'
-
     @allure.title('Пользователь может перейти на страницу Яндекс.Дзена')
     def test_customer_can_go_to_yandex_page(self, driver):
         driver.implicitly_wait(3)
