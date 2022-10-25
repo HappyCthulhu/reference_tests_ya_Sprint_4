@@ -1,0 +1,39 @@
+import allure
+import pytest
+
+from pages.root import RootPage
+
+
+class TestRootPage:
+
+    @allure.title('Проверка ответа на вопрос')
+    @pytest.mark.parametrize(
+        'question_locator,answer_locator,answer,question_number',
+        (
+                (question_locator, answer_locator, answer, question_number) for
+                question_locator, answer_locator, answer, question_number in
+                zip(RootPage.questions_locators, RootPage.answers_locators, RootPage.answers,
+                    range(1, len(RootPage.questions_locators) + 1))
+        )
+    )
+    def test_question(self, driver, question_locator, answer_locator, answer, question_number):
+        page = RootPage(driver)
+        page.open()
+        page.scroll_to_element(question_locator)
+        page.click_on_question(question_locator)
+        assert driver.find_element(*answer_locator).text == answer, \
+            f'Ответ на вопрос {question_number} не совпадает с ожидаемым'
+
+    @allure.title('Пользователь может перейти на страницу Яндекс.Дзена')
+    def test_customer_can_go_to_yandex_page(self, driver):
+        driver.implicitly_wait(3)
+        page = RootPage(driver)
+        page.open()
+
+        page.click_on_yandex_logo()
+        driver.switch_to.window(driver.window_handles[1])
+
+        current_link = page.get_url_with_waiting()
+
+        # необходимо одновременно получить ссылку в AssertionError (а не Bool-value) и проверить несколько значений
+        assert 'yandex.ru' in current_link or current_link == 'https://dzen.ru/?yredirect=true', 'Не был осуществлен переход на Яндекс или Дзен'
